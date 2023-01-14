@@ -7,7 +7,7 @@
     "test": "jest --watchAll",
     "start:prod": "cross-env TS_NODE_PROJECT=\"tsconfig.json\" webpack --watch",
     "start:dev": "nodemon ./dist/server/server.js",
-    "start:multi": "node src/multiWorker.ts"
+    "start:multi": "ts-node src/multiWorker.ts PORT=4848"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@types/supertest": "^2.0.12",
+    "dotenv": "^16.0.3",
     "ts-jest": "^28.0.5",
     "uuid": "^8.3.2"
   },

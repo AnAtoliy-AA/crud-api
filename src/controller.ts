@@ -1,26 +1,32 @@
-import { IUser } from "./types/types";
-
-import { readFileSync } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import fs from 'fs/promises';
 
-const PORT = process.env.PORT || 5000;
-const jsonData = readFileSync(path.join(__dirname, "./data.json"), "utf-8");
+import { IUser } from "./types/types";
 
-let data_users = JSON.parse(jsonData) as Array<IUser>;
 
 class Controller {
-  static async getUsers() {
-    return new Promise((resolve, _) => resolve(data_users));
+  static async readDataFile() {
+    try {
+      return await fs.readFile(path.resolve(__dirname, "./data.json"), { encoding: 'utf8' }) || '';
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async getUsers(): Promise<Array<IUser>> {
+    return new Promise(async (resolve, _) => resolve(JSON.parse(await Controller.readDataFile() || "[]")));
   }
 
   static async getUser(id: string) {
-    return new Promise((resolve, reject) => {
-      const user = data_users.find((user) => user.id === id);
+    return new Promise(async (resolve, reject) => {
+      const data_users = await Controller.getUsers()
+
+      const user = data_users?.find((user) => user.id === id);
       if (user) {
         resolve(user);
       } else {
-        reject(`user with id ${id} not found `);
+        reject(`user with id ${id} was not found `);
       }
     });
   }
@@ -55,29 +61,29 @@ class Controller {
   }
 
   static async updateUser(user: IUser, id: string) {
-    return new Promise((resolve, reject) => {
-      const data_user = data_users.find((u) => u.id === id);
+    // return new Promise((resolve, reject) => {
+    //   const data_user = data_users.find((u) => u.id === id);
 
-      if (!data_user) {
-        reject(`No user with id ${user.id} found`);
-      }
+    //   if (!data_user) {
+    //     reject(`No user with id ${user.id} found`);
+    //   }
 
-      const updatedUser = { ...user, id };
+    //   const updatedUser = { ...user, id };
 
-      resolve(updatedUser);
-    });
+    //   resolve(updatedUser);
+    // });
   }
 
   static async deleteUser(id: string | number) {
-    return new Promise((resolve, reject) => {
-      const user = data_users.find((user) => user.id === id);
+    // return new Promise((resolve, reject) => {
+    //   const user = data_users.find((user) => user.id === id);
 
-      if (!user) {
-        reject(`No user with id ${id} found`);
-      }
+    //   if (!user) {
+    //     reject(`No user with id ${id} found`);
+    //   }
 
-      resolve(`user deleted successfully`);
-    });
+    //   resolve(`user deleted successfully`);
+    // });
   }
 }
 
