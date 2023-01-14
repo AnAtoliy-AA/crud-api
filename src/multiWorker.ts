@@ -1,5 +1,5 @@
 import cluster from 'cluster';
-import { readFileSync, writeFile } from 'fs';
+import { writeFile } from 'fs';
 import http from 'http';
 import { cpus } from 'os';
 import path from 'path';
@@ -12,11 +12,7 @@ import uuidValidateV4 from './utils/validateId';
 import config from "../config";
 
 const numCPUs = cpus().length;
-
 const PORT = process.env.PORT || config.PORT || 4848
-
-const data = readFileSync(path.join(__dirname, "./data.json"), "utf-8");
-let data_users = JSON.parse(data);
 
 if (cluster.isPrimary) {
   console.log(`Primary ${process.pid} is running`);
@@ -44,6 +40,7 @@ if (cluster.isPrimary) {
             const user_data = (await getReqData(req)) as string;
 
             const user = await Controller.createUser(JSON.parse(user_data));
+            const data_users = await Controller.getUsers();
             data_users.push(user);
 
             writeFile(
@@ -93,6 +90,7 @@ if (cluster.isPrimary) {
         case ApiMethods.DELETE:
           try {
             let message = await Controller.deleteUser(id);
+            const data_users = await Controller.getUsers();
             const filteredUsers = data_users.filter((user: IUser) => user.id !== id);
 
             writeFile(
@@ -124,6 +122,7 @@ if (cluster.isPrimary) {
               id
             );
 
+            const data_users = await Controller.getUsers();
             const filteredUsers = data_users.filter((user: IUser) => user.id !== id);
 
             filteredUsers.push(updated_user);
@@ -154,7 +153,5 @@ if (cluster.isPrimary) {
       res.end(JSON.stringify({ message: "Route not found" }));
     }
   }).listen(PORT);
-  console.log()
-
   console.log(`Worker ${process.pid} started at port: ${PORT}`);
 }

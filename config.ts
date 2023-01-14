@@ -5,7 +5,7 @@ dotenv.config({ path: path.resolve(__dirname, "./.env") });
 
 interface ENV {
     NODE_ENV: string | undefined;
-    PORT: number | undefined;
+    PORT: number | null;
 }
 
 interface Config {
@@ -16,7 +16,7 @@ interface Config {
 const getConfig = (): ENV => {
     return {
         NODE_ENV: process.env.NODE_ENV,
-        PORT: process.env.PORT ? Number(process.env.PORT) : undefined,
+        PORT: process.env.PORT ? Number(process.env.PORT) : null,
     };
 };
 

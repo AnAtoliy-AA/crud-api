@@ -1,9 +1,7 @@
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import fs from 'fs/promises';
-
 import { IUser } from "./types/types";
-
 
 class Controller {
   static async readDataFile() {
@@ -31,7 +29,7 @@ class Controller {
     });
   }
 
-  static async createUser(user: IUser) {
+  static async createUser(user: IUser): Promise<IUser> {
     return new Promise((resolve, reject) => {
       const { age, username, hobbies } = user;
       const requiredFieldValidation =
@@ -51,39 +49,41 @@ class Controller {
           reject(`age field is required and should be number`);
         }
         if (!username || typeof username === "string") {
-          reject(`age field is required and should be string`);
+          reject(`username field is required and should be string`);
         }
         if (!hobbies || Array.isArray(hobbies)) {
-          reject(`age field is required and should be Array`);
+          reject(`hobbies field is required and should be Array`);
         }
       }
     });
   }
 
-  static async updateUser(user: IUser, id: string) {
-    // return new Promise((resolve, reject) => {
-    //   const data_user = data_users.find((u) => u.id === id);
+  static async updateUser(user: IUser, id: string): Promise<IUser> {
+    return new Promise(async (resolve, reject) => {
+      const data_users = await Controller.getUsers();
+      const data_user = data_users.find((u) => u.id === id);
 
-    //   if (!data_user) {
-    //     reject(`No user with id ${user.id} found`);
-    //   }
+      if (!data_user) {
+        reject(`No user with id ${user.id} found`);
+      }
 
-    //   const updatedUser = { ...user, id };
+      const updatedUser = { ...user, id };
 
-    //   resolve(updatedUser);
-    // });
+      resolve(updatedUser);
+    });
   }
 
   static async deleteUser(id: string | number) {
-    // return new Promise((resolve, reject) => {
-    //   const user = data_users.find((user) => user.id === id);
+    return new Promise(async (resolve, reject) => {
+      const data_users = await Controller.getUsers();
+      const user = data_users.find((user) => user.id === id);
 
-    //   if (!user) {
-    //     reject(`No user with id ${id} found`);
-    //   }
+      if (!user) {
+        reject(`No user with id ${id} found`);
+      }
 
-    //   resolve(`user deleted successfully`);
-    // });
+      resolve(`user deleted successfully`);
+    });
   }
 }
 
