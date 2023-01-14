@@ -4,19 +4,25 @@ import dotenv from "dotenv";
 dotenv.config({ path: path.resolve(__dirname, "./.env") });
 
 interface ENV {
-    NODE_ENV: string | undefined;
+    NODE_ENV?: string;
     PORT: number | null;
+    API_URL?: string;
+    HOST?: string;
 }
 
 interface Config {
     NODE_ENV: string;
     PORT: number;
+    API_URL: string;
+    HOST: string;
 }
 
 const getConfig = (): ENV => {
     return {
         NODE_ENV: process.env.NODE_ENV,
-        PORT: process.env.PORT ? Number(process.env.PORT) : null,
+        PORT: process.env.PORT ? Number(process.env.PORT) : 4000,
+        API_URL: 'api',
+        HOST: process.env.HOST || "localhost"
     };
 };
 

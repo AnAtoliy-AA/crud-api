@@ -10,7 +10,7 @@ import config from "../config";
 
 const PORT = process.env.PORT || config.PORT || 4000
 
-const server = http.createServer(async (req, res) => {
+export const app = http.createServer(async (req, res) => {
   if (req.url === ApiPath.API_USERS) {
     switch (req.method) {
       case ApiMethods.GET:
@@ -55,7 +55,7 @@ const server = http.createServer(async (req, res) => {
 
     if (!uuidValidateV4(id)) {
       res.writeHead(StatusCodes.BAD_REQUEST, { "Content-Type": "application/json" });
-      res.end("You should use uuid for id");
+      res.end(JSON.stringify({"error": "You should use uuid for id"}));
     }
 
     switch (req.method) {
@@ -142,6 +142,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`server started on port: ${PORT}`);
 });
