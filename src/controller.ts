@@ -35,7 +35,8 @@ class Controller {
       const requiredFieldValidation =
         typeof age === "number" &&
         typeof username === "string" &&
-        Array.isArray(hobbies);
+        Array.isArray(hobbies) &&
+        hobbies?.every((value: any) => typeof value === "string");
 
       if (requiredFieldValidation) {
         const newUser = {

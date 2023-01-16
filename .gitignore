@@ -1,5 +1,4 @@
 node_modules
-.vscode
+dist/server/data.json
 coverage/*
 
-*/data.json

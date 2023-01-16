@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest",
     "start:prod": "cross-env TS_NODE_PROJECT=\"tsconfig.json\" webpack --watch",
-    "start:dev": "nodemon ./dist/server/server.js PORT=4000",
-    "start:multi": "ts-node src/multiWorker.ts PORT=4000"
+    "start:dev": "nodemon ./dist/server/server.js",
+    "start:multi": "ts-node src/multiWorker.ts"
   },
   "repository": {
     "type": "git",

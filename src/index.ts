@@ -10,7 +10,7 @@ import config from "../config";
 
 const PORT = process.env.PORT || config.PORT || 4000
 
-export const app = http.createServer(async (req, res) => {
+const app = http.createServer(async (req, res) => {
   if (req.url === ApiPath.API_USERS) {
     switch (req.method) {
       case ApiMethods.GET:
